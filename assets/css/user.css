@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.hide {
+    display: none;
+}
+
+.control_container {
+    margin: auto;
+    width: 60%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.light_control_container, .fan_control_container {
+    background-color: rgba(80, 255, 80, 0.599);
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: first baseline;
+}
+
+.light {
+    width: 200px;
+}

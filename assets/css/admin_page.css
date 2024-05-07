@@ -1,20 +1,9 @@
-table {
-    border-collapse: collapse;
-    width: 100%;
+.header_container {
+    width: auto;
+    height: 500px;
 }
 
-th,
-td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: left;
-}
-
-.hide {
-    display: none;
-}
-
-.normal_style {
-    font-weight: normal;
-    font-size: 1rem;
+.create_form {
+    display: flex;
+    flex-direction: column;
 }
