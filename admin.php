@@ -56,19 +56,6 @@ $result = mysqli_query($conn, $query)
         ?>
         </table>
     </div>
-
-    <!-- <div class="table-container">
-        <?php include './fetch_data.php'; ?>
-        <table class="user_table">
-            <tr>
-                <th>Number</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Full Name</th>
-                <th>Key</th>
-            </tr>
-        </table>
-    </div> -->
 </body>
 
 </html>
