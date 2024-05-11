@@ -31,17 +31,17 @@ if(isset($_GET['username_input']) && isset($_GET['pass_input'])) {
         $_SESSION['user_full_name'] = $row['user_full_name'];
         $_SESSION['api_key'] = $row['api_key'];
 
-        // Redirect to user page
-        header("Location: user.php");
+        // Close connection
+        $conn->close();
+
+        // Redirect to user page with api_key in query string
+        header("Location: user.php?api_key=" . urlencode($_SESSION['api_key']));
         exit();
     } else {
         // Username and password do not match, show an alert
         echo "<script>alert('Wrong Account name or Password');</script>";
         echo "<script>window.location.href = 'login_user.php';</script>";
     }
-
-    // Close connection
-    $conn->close();
 } else {
     echo "Please provide both username and password.";
 }

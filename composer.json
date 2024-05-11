@@ -1,0 +1,6 @@
+{
+    "require": {
+        "kreait/firebase-php": "^5.17",
+        "guzzlehttp/guzzle": "^7.8"
+    }
+}

@@ -10,4 +10,3 @@ if(isset($_SESSION['user_full_name'])) {
     // User is not logged in or full name is not available
     echo "Guest"; // Output a default value or handle as needed
 }
-?>

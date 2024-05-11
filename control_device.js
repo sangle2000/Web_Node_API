@@ -1,31 +1,20 @@
+import { initializeFirebase } from "./call_to_firebase.js";
+
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
 const light_btn = $$(".light")
 const fan_btn = $$(".fan")
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const apiKey = urlParams.get('api_key');
 
-// Initialize Firebase with apiKey obtained from PHP login
-const firebaseConfig = {
-    apiKey: "AIzaSyA4feu6WUo9gA34NfCoSA-R3QTxtK4EPLk",
-    authDomain: "smart-home-d16f8.firebaseapp.com",
-    projectId: "smart-home-d16f8",
-    storageBucket: "smart-home-d16f8.appspot.com",
-    databaseURL: "https://smart-home-d16f8-default-rtdb.asia-southeast1.firebasedatabase.app",
-    messagingSenderId: "212130358513",
-    appId: "1:212130358513:web:3253125ef635df6e5f3550",
-    measurementId: "G-2EHSQLLKFC"
-};
-
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+const database = initializeFirebase(apiKey);
 
 function updateFanStatus(status) {
     // Update fan status under the specific apiKey node
-    database.ref(`${window.apiKey}/fan`).set(status)
+    database.ref(`${apiKey}/fan`).set(status)
         .then(() => {
             console.log('Fan status updated successfully');
         })
@@ -36,7 +25,7 @@ function updateFanStatus(status) {
 
 function updateLightStatus(status) {
     // Update light status under the specific apiKey node
-    database.ref(`${window.apiKey}/light`).set(status)
+    database.ref(`${apiKey}/light`).set(status)
         .then(() => {
             console.log('Light status updated successfully');
         })
@@ -47,8 +36,8 @@ function updateLightStatus(status) {
 
 // Function to fetch initial values from the database
 async function fetchInitialValues() {
-    const fanSnapshot = await database.ref(`${window.apiKey}/fan`).once('value');
-    const lightSnapshot = await database.ref(`${window.apiKey}/light`).once('value');
+    const fanSnapshot = await database.ref(`${apiKey}/fan`).once('value');
+    const lightSnapshot = await database.ref(`${apiKey}/light`).once('value');
 
     const fanStatus = fanSnapshot.val();
     const lightStatus = lightSnapshot.val();
