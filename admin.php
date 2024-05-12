@@ -28,6 +28,8 @@ $result = mysqli_query($conn, $query)
                 <button class="create_btn" type="submit">Success Create User
                     Account</button>
             </div>
+
+            <button class="btn btn-back">Back</button>
         </form>
     </div>
 
@@ -56,6 +58,18 @@ $result = mysqli_query($conn, $query)
         ?>
         </table>
     </div>
+
+    <script>
+        const $ = document.querySelector.bind(document)
+        const $$ = document.querySelectorAll.bind(document)
+
+        const btn_back = $(".btn-back")
+
+        btn_back.onclick = () => {
+            window.location.href = "login_admin.php"
+        }
+
+    </script>
 </body>
 
 </html>

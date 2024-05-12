@@ -26,6 +26,7 @@ if (isset($_SESSION['api_key'])) {
                 <img src="./assets/image/logo.jpg" width="80" height="80" class="d-inline-block align-top" alt="">
             </a>
             <div id="userFullNamePlaceholder"></div>
+            <button class="btn btn-back">Back</button>
         </nav>
     </div>
 
@@ -41,6 +42,15 @@ if (isset($_SESSION['api_key'])) {
                 <img class="fan hide" src="./assets/symbol/fan_on.png" alt="fan on" srcset="">
             </div>
         </div>
+
+        <div class="env_container">
+            <div class="temp_container">
+                <img src="./assets/symbol/low_temp.png" alt="" class="temp_img" width="100px">
+                <img src="./assets/symbol/nor_temp.png" alt="" class="temp_img hide" width="100px">
+                <img src="./assets/symbol/high_temp.png" alt="" class="temp_img hide" width="100px">
+                <span class="temp_value">&deg;C</span>
+            </div>
+        </div>
     </div>
     <!-- <button class="turnOnButton">Turn On</button>
         <button class="turnOffButton">Turn Off</button> -->
@@ -51,6 +61,12 @@ if (isset($_SESSION['api_key'])) {
 
         const light_btn = $$(".light")
         const fan_btn = $$(".fan")
+
+        const btn_back = $(".btn-back")
+
+        const temp_img = $$(".temp_img")
+        const temp_val = $(".temp_value")
+
         import {
             initializeApp
         } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
@@ -78,7 +94,7 @@ if (isset($_SESSION['api_key'])) {
 
         function updateFanStatus(status) {
             // Update fan status under the specific apiKey node
-            set(ref(database, `${apiKey}/fan`), status)
+            set(ref(database, `UsersData/${apiKey}/Writings/Fan`), status)
                 .then(() => {
                     console.log('Fan status updated successfully');
                 })
@@ -89,7 +105,7 @@ if (isset($_SESSION['api_key'])) {
 
         function updateLightStatus(status) {
             // Update light status under the specific apiKey node
-            set(ref(database, `${apiKey}/light`), status)
+            set(ref(database, `UsersData/${apiKey}/Writings/Light`), status)
                 .then(() => {
                     console.log('Light status updated successfully');
                 })
@@ -98,14 +114,82 @@ if (isset($_SESSION['api_key'])) {
                 });
         }
 
-        // Function to fetch initial values from the database
-        async function fetchInitialValues() {
-            const fanSnapshot = await database.ref(`${apiKey}/fan`).once('value');
-            const lightSnapshot = await database.ref(`${apiKey}/light`).once('value');
+        async function getFanStatus() {
+            try {
+                // Retrieve fan status from the database
+                const fanSnapshot = await get(ref(database, `UsersData/${apiKey}/Writings/Fan`));
 
-            const fanStatus = fanSnapshot.val();
-            const lightStatus = lightSnapshot.val();
+                // Extract the fan status value
+                const fanStatus = fanSnapshot.val();
+
+                if (fanStatus == false) {
+                    fan_btn[1].classList.add('hide')
+                    fan_btn[0].classList.remove('hide')
+                } else {
+                    fan_btn[0].classList.add('hide')
+                    fan_btn[1].classList.remove('hide')
+                }
+            } catch (error) {
+                console.error('Error fetching fan status:', error);
+                throw error; // Rethrow the error to handle it elsewhere if needed
+            }
         }
+
+        async function getLightStatus() {
+            try {
+                // Retrieve light status from the database
+                const lightSnapshot = await get(ref(database, `UsersData/${apiKey}/Writings/Light`));
+
+                // Extract the light status value
+                const lightStatus = lightSnapshot.val();
+
+                if (lightStatus == false) {
+                    light_btn[1].classList.add('hide')
+                    light_btn[0].classList.remove('hide')
+                } else {
+                    light_btn[0].classList.add('hide')
+                    light_btn[1].classList.remove('hide')
+                }
+            } catch (error) {
+                console.error('Error fetching light status:', error);
+                throw error; // Rethrow the error to handle it elsewhere if needed
+            }
+        }
+
+        async function getTempValue() {
+            try {
+                // Retrieve light status from the database
+                const tempSnapshot = await get(ref(database, `UsersData/${apiKey}/readings/temp`));
+
+                // Extract the light status value
+                const tempValue = tempSnapshot.val();
+
+                if (tempValue <= 20) {
+                    temp_img[0].classList.remove('hide')
+                    temp_img[1].classList.add('hide')
+                    temp_img[2].classList.add('hide')
+                } else if (tempValue >= 30) {
+                    temp_img[2].classList.remove('hide')
+                    temp_img[0].classList.add('hide')
+                    temp_img[1].classList.add('hide')
+                } else {
+                    temp_img[1].classList.remove('hide')
+                    temp_img[0].classList.add('hide')
+                    temp_img[2].classList.add('hide')
+                }
+
+                temp_val.innerHTML = tempValue + "&deg;C"
+
+            } catch (error) {
+                console.error('Error fetching light status:', error);
+                throw error; // Rethrow the error to handle it elsewhere if needed
+            }
+        }
+
+        getFanStatus()
+        getLightStatus()
+        // Run the function once every second
+        setInterval(getTempValue, 1000);
 
         for (let i = 0; i < light_btn.length; i++) {
             light_btn[i].onclick = () => {
@@ -133,6 +217,10 @@ if (isset($_SESSION['api_key'])) {
                     updateFanStatus(false);
                 }
             }
+        }
+
+        btn_back.onclick = () => {
+            window.location.href = "login_user.php"
         }
     </script>
     <!-- <script type="module" src="./call_to_firebase.js"></script> -->

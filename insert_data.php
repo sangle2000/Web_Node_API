@@ -61,10 +61,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $client = new Client();
 
     // Set the new key with the desired structure in Firebase
-    $response = $client->request('PUT', 'https://smart-home-d16f8-default-rtdb.asia-southeast1.firebasedatabase.app/'.$api_key.'.json', [
+    $response = $client->request('PUT', 'https://smart-home-d16f8-default-rtdb.asia-southeast1.firebasedatabase.app/UsersData/'.$api_key.'/Writings.json', [
         'json' => [
-            'fan' => false,
-            'light' => false
+            'Fan' => false,
+            'Light' => false
         ]
     ]);
 
