@@ -50,6 +50,11 @@ if (isset($_SESSION['api_key'])) {
                 <img src="./assets/symbol/high_temp.png" alt="" class="temp_img hide" width="100px">
                 <span class="temp_value">&deg;C</span>
             </div>
+
+            <div class="hum_container">
+                <img src="./assets/symbol/hum.png" alt="" class="hum_img" width="100px">
+                <span class="hum_value">%</span>
+            </div>
         </div>
     </div>
     <!-- <button class="turnOnButton">Turn On</button>
@@ -66,6 +71,7 @@ if (isset($_SESSION['api_key'])) {
 
         const temp_img = $$(".temp_img")
         const temp_val = $(".temp_value")
+        const hum_val = $(".hum_value")
 
         import {
             initializeApp
@@ -186,10 +192,27 @@ if (isset($_SESSION['api_key'])) {
             }
         }
 
+        async function getHumpValue() {
+            try {
+                // Retrieve light status from the database
+                const humSnapshot = await get(ref(database, `UsersData/${apiKey}/readings/hum`));
+
+                // Extract the light status value
+                const humValue = humSnapshot.val();
+
+                hum_val.innerHTML = humValue + "%"
+
+            } catch (error) {
+                console.error('Error fetching light status:', error);
+                throw error; // Rethrow the error to handle it elsewhere if needed
+            }
+        }
+
         getFanStatus()
         getLightStatus()
         // Run the function once every second
         setInterval(getTempValue, 1000);
+        setInterval(getHumpValue, 1000);
 
         for (let i = 0; i < light_btn.length; i++) {
             light_btn[i].onclick = () => {
